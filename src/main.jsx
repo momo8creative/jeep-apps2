@@ -5,11 +5,14 @@ import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { BrowserRouter } from "react-router-dom";
+import KmProvider from "./contexts/KmContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <KmProvider>
+        <App />
+      </KmProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
