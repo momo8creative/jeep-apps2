@@ -1,20 +1,47 @@
 import { useEffect, useState } from "react";
-import { Card, Container, Image, Stack, Row, Col } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Container,
+  Image,
+  Stack,
+  Row,
+  Col,
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useKmContext } from "../contexts/KmContext";
 import logo from "../images/jeep400.png";
-import { convertDate, convertTime } from "../utils/ConvertDateTime";
+import {
+  convertDate,
+  convertDateTime,
+  convertTime,
+} from "../utils/ConvertDateTime";
+
+// import "./Home.css";
 
 const Home = () => {
-  const [lastPemakaian, setlastPemakaian] = useState(null);
-  const { readLastPemakaian } = useKmContext();
+  const {
+    readLastPemakaian,
+    readKmBulan,
+    readLastKm,
+    lastPemakaian,
+    lastKm,
+    kmBulan,
+  } = useKmContext();
+
+  const [bulanIni, setBulanIni] = useState();
+
+  function getBulanIni() {
+    let bln = new Date().getMonth();
+    setBulanIni(bln + 1);
+  }
   useEffect(() => {
-    if (lastPemakaian == null) {
-      readLastPemakaian().then((res) => {
-        if (res.error) return console.log("error", res.message);
-        setlastPemakaian(res);
-      });
-    }
+    // if (lastPemakaian != null) return console.log("data sudah ada");
+    readLastPemakaian();
+    readKmBulan();
+    readLastKm();
+
+    getBulanIni();
   }, []);
   //
   return (
@@ -25,10 +52,20 @@ const Home = () => {
           <h1 className="fw-bold">Jeep Apps</h1>
         </Container>
       </Stack>
+
+      <Link to="/tambah-pemakaian" className="mb-4 d-block text-center">
+        <Button variant="primary" className="">
+          Tambah Pemakaian
+        </Button>
+      </Link>
+
       {lastPemakaian && (
         <Card className="mb-4">
           <Card.Body>
             <Card.Title>Pemakaian Terakhir</Card.Title>
+            <div className="text-muted small">
+              Dibuat : {convertDateTime(lastPemakaian.timestamp)}
+            </div>
             <Row>
               <Col>
                 <small>Berangkat</small>
@@ -73,16 +110,38 @@ const Home = () => {
                 <div className="ps-2 fw-bold">{lastPemakaian.km_pemakaian}</div>
               </Col>
             </Row>
-
-            <div className="text-muted small">
-              Dibuat : {convertDate(lastPemakaian.timestamp)}
-            </div>
           </Card.Body>
         </Card>
       )}
-      <Card className="mb-4">
-        <Card.Body>asdsd</Card.Body>
-      </Card>
+
+      <Row>
+        <Col>
+          <Card className="mb-4 card_satu">
+            <Card.Body className="d-flex align-items-start">
+              <div>Km Terakhir</div>
+              <div
+                className="fw-bold text-end card_nilai"
+                style={{ fontSize: "2rem" }}
+              >
+                {lastKm}
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col>
+          <Card className="mb-4 card_dua">
+            <Card.Body className="d-flex align-items-start">
+              <div>Total Km Bulan ini</div>
+              <div
+                className="fw-bold text-end card_nilai"
+                style={{ fontSize: "2rem" }}
+              >
+                {kmBulan[bulanIni]}
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </Container>
   );
 };

@@ -10,6 +10,9 @@ export const useKmContext = () => useContext(KmContext);
 const KmProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [pemakaian, setPemakaian] = useState([]);
+  const [lastPemakaian, setlastPemakaian] = useState();
+  const [kmBulan, setKmBulan] = useState({});
+  const [lastKm, setLastKm] = useState();
 
   const getApiPemakaian = async (data) => {
     setIsLoading(true);
@@ -17,7 +20,7 @@ const KmProvider = ({ children }) => {
       const respon = await axios.get(URL_API, {
         params: data,
       });
-      console.log(respon.data);
+      // console.log(respon.data);
       setIsLoading(false);
       return respon.data;
     } catch (err) {
@@ -45,7 +48,19 @@ const KmProvider = ({ children }) => {
   const readLastPemakaian = async (data = {}) => {
     data["action"] = "read-last";
     let result = await getApiPemakaian(data);
-    return result;
+    setlastPemakaian(result);
+  };
+
+  const readLastKm = async (data = {}) => {
+    data["action"] = "read-last-km";
+    let result = await getApiPemakaian(data);
+    setLastKm(result);
+  };
+
+  const readKmBulan = async (data = {}) => {
+    data["action"] = "read-km-bulan";
+    let result = await getApiPemakaian(data);
+    setKmBulan(result);
   };
 
   //
@@ -56,7 +71,17 @@ const KmProvider = ({ children }) => {
   //
   return (
     <KmContext.Provider
-      value={{ addPemakaian, readPemakaian, readLastPemakaian, pemakaian }}
+      value={{
+        addPemakaian,
+        readPemakaian,
+        readLastPemakaian,
+        readKmBulan,
+        readLastKm,
+        kmBulan,
+        lastPemakaian,
+        lastKm,
+        pemakaian,
+      }}
     >
       <>
         {children}

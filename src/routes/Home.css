@@ -1,0 +1,11 @@
+.card_satu {
+  background-color: rgba(95, 158, 160, 0.8);
+  color: rgb(250, 250, 250);
+}
+.card_dua {
+  background-color: rgba(130, 233, 173, 0.8);
+  color: rgb(250, 250, 250);
+}
+.card_satu .card_nilai {
+  font-size: 2rem;
+}
