@@ -32,13 +32,22 @@ const KmProvider = ({ children }) => {
     data["id"] = uuidv4();
     return getApiPemakaian(data);
   };
-  const viewPemakaian = async (data = {}) => {
+
+  const readPemakaian = async (data = {}) => {
     data["action"] = "read";
     let result = await getApiPemakaian(data);
     setPemakaian(result.data);
   };
+
   const deletePemakaian = () => {};
   const updatePemakaian = () => {};
+
+  const readLastPemakaian = async (data = {}) => {
+    data["action"] = "read-last";
+    let result = await getApiPemakaian(data);
+    return result;
+  };
+
   //
 
   useEffect(() => {
@@ -46,7 +55,9 @@ const KmProvider = ({ children }) => {
   }, []);
   //
   return (
-    <KmContext.Provider value={{ addPemakaian, viewPemakaian, pemakaian }}>
+    <KmContext.Provider
+      value={{ addPemakaian, readPemakaian, readLastPemakaian, pemakaian }}
+    >
       <>
         {children}
         <Loading show={isLoading} />

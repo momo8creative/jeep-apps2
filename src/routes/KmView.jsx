@@ -3,10 +3,10 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 import { useKmContext } from "../contexts/KmContext";
 
 const KmView = () => {
-  const { viewPemakaian, pemakaian } = useKmContext();
+  const { readPemakaian, pemakaian } = useKmContext();
 
   useEffect(() => {
-    viewPemakaian();
+    readPemakaian();
   }, []);
   //
   return (
